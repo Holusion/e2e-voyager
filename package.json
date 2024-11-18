@@ -1,0 +1,43 @@
+{
+  "name": "e2e-voyager",
+  "version": "0.0.0",
+  "description": "end-to-end tests for DPO-Voyager",
+  "main": "mocharc.js",
+  "type": "module",
+  "scripts": {
+    "test": "mocha"
+  },
+  "mocha":{
+    "reporter": "spec",
+    "slow": 1500,
+    "timeout": 20000,
+    "require": ["hooks/chai.js", "hooks/browser.js", "hooks/serve.js", "hooks/chai-compare.js"],
+    "spec": "tests/**/*.test.js",
+    "asyncOnly": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Holusion/e2e-voyager.git"
+  },
+  "author": "Holusion SAS <contact@holusion.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Holusion/e2e-voyager/issues"
+  },
+  "engines": {
+    "node": ">=20.11"
+  },
+  "homepage": "https://github.com/Holusion/e2e-voyager#readme",
+  "devDependencies": {
+    "chai-screenshot": "^0.1.1",
+    "mocha": "^10.8.2",
+    "mocha-chai-snapshot": "^1.0.0",
+    "puppeteer": "^23.8.0",
+    "supertest": "^7.0.0"
+  },
+  "dependencies": {
+    "@types/express": "^5.0.0",
+    "express": "^4.21.1",
+    "webdav-server": "^2.6.2"
+  }
+}

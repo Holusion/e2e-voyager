@@ -1,0 +1,416 @@
+{
+  "asset": {
+    "type": "application/si-dpo-3d.document+json",
+    "version": "1.0",
+    "generator": "Voyager",
+    "copyright": "CC-0 Holusion SAS"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "units": "mm",
+      "nodes": [
+        0,
+        1,
+        6
+      ],
+      "meta": 0,
+      "setup": 0
+    }
+  ],
+  "nodes": [
+    {
+      "translation": [
+        -32.3264443,
+        15.4883535,
+        24.0302938
+      ],
+      "rotation": [
+        -0.1630735,
+        -0.4415742,
+        -0.0819715,
+        0.8784645
+      ],
+      "name": "Camera",
+      "camera": 0
+    },
+    {
+      "rotation": [
+        0,
+        -0.4491182,
+        0,
+        0.8934724
+      ],
+      "name": "Lights",
+      "children": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "translation": [
+        -8.783957,
+        9.617225,
+        16.1972554
+      ],
+      "rotation": [
+        0.4829741,
+        -0.1070728,
+        0.1880998,
+        0.8484633
+      ],
+      "scale": [
+        3.4641016,
+        3.4641016,
+        3.4641016
+      ],
+      "name": "Key",
+      "light": 0
+    },
+    {
+      "translation": [
+        15.8282775,
+        9.3576864,
+        9.6901671
+      ],
+      "rotation": [
+        0.3546969,
+        0.163893,
+        -0.3861077,
+        0.8356136
+      ],
+      "scale": [
+        3.4641016,
+        3.4641016,
+        3.4641016
+      ],
+      "name": "Fill #1",
+      "light": 1
+    },
+    {
+      "translation": [
+        -12.1286776,
+        -15.8609202,
+        5.7729015
+      ],
+      "rotation": [
+        0.9374013,
+        -0.3018693,
+        0.0532277,
+        0.1652891
+      ],
+      "scale": [
+        3.4641016,
+        3.4641016,
+        3.4641016
+      ],
+      "name": "Fill #2",
+      "light": 2
+    },
+    {
+      "translation": [
+        18.0541663,
+        1.0764251,
+        -10.2415033
+      ],
+      "rotation": [
+        0.373256,
+        0.6426073,
+        -0.5786063,
+        0.3360813
+      ],
+      "scale": [
+        3.4641016,
+        3.4641016,
+        3.4641016
+      ],
+      "name": "Rim",
+      "light": 3
+    },
+    {
+      "name": "Model0",
+      "model": 0
+    }
+  ],
+  "cameras": [
+    {
+      "type": "perspective",
+      "perspective": {
+        "yfov": 52,
+        "znear": 0.1409089,
+        "zfar": 140.9089269
+      },
+      "autoNearFar": true
+    }
+  ],
+  "lights": [
+    {
+      "color": [
+        1,
+        0.95,
+        0.9
+      ],
+      "intensity": 1,
+      "type": "directional",
+      "shadowEnabled": true,
+      "shadowSize": 34.6410162
+    },
+    {
+      "color": [
+        0.9,
+        0.95,
+        1
+      ],
+      "intensity": 0.7,
+      "type": "directional",
+      "shadowEnabled": true,
+      "shadowSize": 34.6410162
+    },
+    {
+      "color": [
+        0.8,
+        0.85,
+        1
+      ],
+      "intensity": 0.5,
+      "type": "directional"
+    },
+    {
+      "color": [
+        0.85,
+        0.9078313,
+        1
+      ],
+      "intensity": 0.6,
+      "type": "directional"
+    }
+  ],
+  "models": [
+    {
+      "units": "cm",
+      "boundingBox": {
+        "min": [
+          -1,
+          -1,
+          -1
+        ],
+        "max": [
+          1,
+          1,
+          1
+        ]
+      },
+      "derivatives": [
+        {
+          "usage": "Web3D",
+          "quality": "High",
+          "assets": [
+            {
+              "uri": "cube.glb",
+              "type": "Model",
+              "mimeType": "model/gltf-binary"
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        {
+          "id": "3JcgUcbImUWD",
+          "titles": {
+            "EN": "Cube Face"
+          },
+          "leads": {
+            "EN": "Face of a cube"
+          },
+          "viewId": "tKUHim",
+          "position": [
+            -0.0735489,
+            0.360069,
+            1
+          ],
+          "direction": [
+            -0.0039215,
+            -0.0039215,
+            0.9999846
+          ],
+          "scale": 0.0866025
+        }
+      ]
+    }
+  ],
+  "metas": [
+    {
+      "collection": {
+        "titles": {
+          "EN": "Cube Scene"
+        },
+        "intros": {
+          "EN": ""
+        }
+      }
+    }
+  ],
+  "setups": [
+    {
+      "units": "cm",
+      "interface": {
+        "visible": true,
+        "logo": true,
+        "menu": true,
+        "tools": true
+      },
+      "viewer": {
+        "shader": "Default",
+        "exposure": 1,
+        "toneMapping": false,
+        "gamma": 2,
+        "isWallMountAR": false,
+        "arScale": 1
+      },
+      "reader": {
+        "enabled": false,
+        "position": "Overlay"
+      },
+      "navigation": {
+        "enabled": true,
+        "autoZoom": true,
+        "autoRotation": false,
+        "lightsFollowCamera": true,
+        "type": "Orbit",
+        "orbit": {
+          "orbit": [
+            -15.0982659,
+            -34.2990955,
+            0
+          ],
+          "offset": [
+            0,
+            0,
+            46.3515908
+          ],
+          "minOrbit": [
+            -90,
+            null,
+            null
+          ],
+          "maxOrbit": [
+            90,
+            null,
+            null
+          ],
+          "minOffset": [
+            null,
+            null,
+            0.1
+          ],
+          "maxOffset": [
+            null,
+            null,
+            10000
+          ]
+        }
+      },
+      "background": {
+        "style":"Solid",
+        "color0":[0.2,0.25,0.3],
+        "color1":[0.01,0.03,0.05]
+      },
+      "floor": {
+        "visible": false,
+        "position": [
+          0,
+          -10,
+          0
+        ],
+        "size": 20,
+        "color": [
+          0.6,
+          0.75,
+          0.8
+        ],
+        "opacity": 0.5,
+        "receiveShadow": false,
+        "autoSize": true
+      },
+      "grid": {
+        "visible": false,
+        "color": [
+          0.5,
+          0.7,
+          0.8
+        ]
+      },
+      "tape": {
+        "enabled": false
+      },
+      "slicer": {
+        "enabled": false,
+        "axis": "X",
+        "position": 0.5,
+        "inverted": false,
+        "color": [
+          0,
+          0.61,
+          0.87
+        ]
+      },
+      "environment": {
+        "index": 0
+      },
+      "language": {
+        "language": "EN"
+      },
+      "audio": {
+        "narrationId": ""
+      },
+      "snapshots": {
+        "features": [
+          "reader",
+          "viewer",
+          "navigation"
+        ],
+        "targets": [
+          "scenes/0/setup/reader/enabled",
+          "scenes/0/setup/reader/position",
+          "scenes/0/setup/reader/articleId",
+          "scenes/0/setup/viewer/annotationsVisible",
+          "scenes/0/setup/viewer/activeAnnotation",
+          "scenes/0/setup/viewer/activeTags",
+          "scenes/0/setup/viewer/shader",
+          "scenes/0/setup/viewer/exposure",
+          "scenes/0/setup/navigation/orbit",
+          "scenes/0/setup/navigation/offset"
+        ],
+        "states": [
+          {
+            "id": "tKUHim",
+            "values": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              [
+                -15.0982659,
+                -34.2990955,
+                0
+              ],
+              [
+                0,
+                0,
+                46.3515908
+              ]
+            ],
+            "curve": "EaseOutQuad",
+            "duration": 1
+          }
+        ]
+      }
+    }
+  ]
+}
