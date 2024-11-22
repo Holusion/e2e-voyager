@@ -1,8 +1,12 @@
 import fs from "fs/promises";
 import path from "path";
+import { setTimeout } from "timers/promises";
 
 const fixtures = path.join(import.meta.dirname, "../fixtures/");
 
+
+const match_scene_language = "voyager-explorer >>> .sv-chrome-view #language"
+const match_scene_title = "voyager-explorer >>> .sv-chrome-view .sv-main-title";
 describe("I18n features", function(){
   /**@type {import("puppeteer").Page} */
   let page;
@@ -17,7 +21,7 @@ describe("I18n features", function(){
     docString = await fs.readFile(path.join(fixtures, "cube", "scene.svx.json"));
   });
 
-  describe("non-default scene language", function(){
+  describe("with setup language", function(){
     this.beforeAll(async function(){
       let doc = JSON.parse(docString);
       doc.setups[0].language.language = "FR";
@@ -28,26 +32,75 @@ describe("I18n features", function(){
       .expect(201);
     });
 
-    it("opens a document with non-default setup language", async function(){
+    it("use setup language", async function(){
       await page.goto(`${this.explorer}?prompt=false&document=scene-fr.svx.json`, {
         waitUntil: 'domcontentloaded',
       });
       await page.waitForFunction(()=>{
         return new Promise(resolve=>requestAnimationFrame(resolve));
       });
-      await expect(page).rect({x:700, y:550, width:50, height: 50}).to.show("interface in french");
-      await expect(page).rect({x:50, y:0, width:150, height: 50}).to.show("title in french");
+
+      //Verify matchers
+      expect(await page.$$(match_scene_language)).to.have.property("length", 1);
+      expect(await page.$$(match_scene_title)).to.have.property("length", 1);
+
+      let lang = await page.$eval(match_scene_language, el=>el.textContent.trim());
+      expect(lang).to.equal("FR");
+      let title = await page.$eval(match_scene_title, el=>el.textContent.trim());
+      expect(title).to.equal("Scène du Cube");
     });
     
-    it("opens with non-default language", async function(){
+    it("force another language", async function(){
       await page.goto(`${this.explorer}?prompt=false&document=scene-fr.svx.json&lang=EN`, {
         waitUntil: 'domcontentloaded',
       });
       await page.waitForFunction(()=>{
         return new Promise(resolve=>requestAnimationFrame(resolve));
       });
-      await expect(page).rect({x:700, y:550, width:50, height: 50}).to.show("interface in english");
-      await expect(page).rect({x:50, y:0, width:150, height: 50}).to.show("title in english");
+      let lang = await page.$eval(match_scene_language, el=>el.textContent.trim());
+      expect(lang).to.equal("EN");
+      let title = await page.$eval(match_scene_title, el=>el.textContent.trim());
+      expect(title).to.equal("Cube Scene");
     });
   });
+
+  describe("no setup language",function(){
+    this.beforeAll(async function(){
+      let doc = JSON.parse(docString);
+      delete doc.setups[0].language;
+      //Otherwise language choice isn't shown
+      doc.metas[0].collection.titles["FR"]= "Scène du Cube";
+      await this.request.put("/scene-nosetup.svx.json")
+      .send(JSON.stringify(doc))
+      .expect(201);
+
+    });
+
+    it("initializes in English by default", async function(){
+      await page.goto(`${this.explorer}?prompt=false&document=scene-nosetup.svx.json`, {
+        waitUntil: 'domcontentloaded',
+      });
+      await page.waitForFunction(()=>{
+        return new Promise(resolve=>requestAnimationFrame(resolve));
+      });
+      let lang = await page.$eval(match_scene_language, el=>el.textContent.trim());
+      expect(lang).to.equal("EN");
+      let title = await page.$eval(match_scene_title, el=>el.textContent.trim());
+      expect(title).to.equal("Cube Scene");
+    });
+
+    it("can be forced to initialize in french", async function(){
+      await page.goto(`${this.explorer}?prompt=false&document=scene-nosetup.svx.json&lang=FR`, {
+        waitUntil: 'domcontentloaded',
+      });
+      await page.waitForFunction(()=>{
+        return new Promise(resolve=>requestAnimationFrame(resolve));
+      });
+      let lang = await page.$eval(match_scene_language, el=>el.textContent.trim());
+      expect(lang).to.equal("FR");
+      let title = await page.$eval(match_scene_title, el=>el.textContent.trim());
+      expect(title).to.equal("Scène du Cube");
+    });
+
+  })
 });
