@@ -45,7 +45,7 @@ export const mochaHooks = {
     if (!wsEndpoint) {
       throw new Error('Puppeteer\'s wsEndpoint not found');
     }
-    this._pages = [];
+    this._contexts = [];
     try{
       this.browser = await puppeteer.connect({browserWSEndpoint:wsEndpoint});
     }catch(e){
@@ -53,18 +53,32 @@ export const mochaHooks = {
       throw new Error(`Failed to connect to puppeteer on ${wsEndpoint}: ${e.message}`);
     }
 
-    this.newPage = async ({ autoClose=true}={})=>{
-      const page = await this.browser.newPage();
+    this.newPage = async ()=>{
+      const ctx = await this.browser.createBrowserContext();
+      const page = await ctx.newPage();
       page.setDefaultTimeout(timeout);
-      if(autoClose) this._pages.push(page);
+
+
+      await page.evaluateOnNewDocument(() => {
+        window.addEventListener('DOMContentLoaded', () => {
+          let m = document.createElement("meta");
+          m.name = "model-loads";
+          m.content = "0";
+          document.head.appendChild(m);
+          let loads = 0;
+          document.querySelector("voyager-explorer")?.addEventListener("model-load", ()=>{ m.content = (++loads).toString()});
+        });
+      });
+
+      this._contexts.push(ctx);
 
       return page;
     }
   },
   async afterAll(){
-    await Promise.all(this._pages.map(async (page)=>{
+    await Promise.all(this._contexts.map(async (ctx)=>{
       try{
-        if(!page.isClosed) await page.close();
+        if(!ctx.closed) await ctx.close();
       }catch(e){
         console.warn("Failed to close puppeteer page. Do not close manually");
       }

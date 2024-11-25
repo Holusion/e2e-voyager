@@ -80,9 +80,7 @@ describe("I18n features", function(){
       await page.goto(`${this.explorer}?prompt=false&document=scene-nosetup.svx.json`, {
         waitUntil: 'domcontentloaded',
       });
-      await page.waitForFunction(()=>{
-        return new Promise(resolve=>requestAnimationFrame(resolve));
-      });
+      await page.locator(`meta[name="model-loads"][content="1"]`).wait();
       let lang = await page.$eval(match_scene_language, el=>el.textContent.trim());
       expect(lang).to.equal("EN");
       let title = await page.$eval(match_scene_title, el=>el.textContent.trim());
@@ -93,9 +91,7 @@ describe("I18n features", function(){
       await page.goto(`${this.explorer}?prompt=false&document=scene-nosetup.svx.json&lang=FR`, {
         waitUntil: 'domcontentloaded',
       });
-      await page.waitForFunction(()=>{
-        return new Promise(resolve=>requestAnimationFrame(resolve));
-      });
+      await page.locator(`meta[name="model-loads"][content="1"]`).wait();
       let lang = await page.$eval(match_scene_language, el=>el.textContent.trim());
       expect(lang).to.equal("FR");
       let title = await page.$eval(match_scene_title, el=>el.textContent.trim());

@@ -37,3 +37,7 @@ if set, Write a diff file showing where the screenshot and teh stored snapshot d
 ### WRITE_NEW
 
 if set, write the screenshot alongside the current snapshot
+
+## Context
+
+A [BrowserContext](https://pptr.dev/guides/browser-management#browser-contexts) is created for each `newPage` that is created.

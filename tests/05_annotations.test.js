@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 
-describe("Open simple scenes", function(){
+describe("Annotations view", function(){
   /**@type {import("puppeteer").Page} */
   let page;
   this.beforeAll(async function(){
@@ -17,33 +17,23 @@ describe("Open simple scenes", function(){
   });
 
 
-
-  it("opens a document", async function(){
-    await page.goto(`${this.explorer}?prompt=false&document=scene.svx.json`, {
-      waitUntil: 'domcontentloaded',
-    });
-    await page.waitForFunction(()=>{
-      return new Promise(resolve=>requestAnimationFrame(resolve));
-    });
-    await expect(page).to.show("basic document");
-  });
-
-  it("opens a raw GLtf model", async function(){
-    await page.goto(`${this.explorer}?prompt=false&model=cube.glb`, {waitUntil: "load"});
-    await page.locator(`meta[name="model-loads"][content="1"]`).wait();
-    await expect(page).to.show("single model");
-  });
-
   it("toggles annotations", async function(){
     await page.goto(`${this.explorer}?prompt=false&document=scene.svx.json`, {
       waitUntil: 'load',
     });
+    await page.locator(`meta[name="model-loads"][content="1"]`).wait();
     await page.$eval("voyager-explorer", ex =>{
       /**@ts-ignore  */
       ex.toggleAnnotations();
     });
-    await page.locator(`meta[name="model-loads"][content="1"]`).wait();
+    await page.waitForFunction(()=>{
+      return new Promise(resolve=>requestAnimationFrame(resolve));
+    });
     await expect(page).to.show("annotations");
-  })
+  });
+
+  it.skip('focus on annotation view', async function(){
+    await page.locator(".sv-annotation .sv-title").click();
+  });
 
 });

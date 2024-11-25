@@ -4,9 +4,9 @@ import { promisify } from "util";
 
 import * as chai from 'chai';
 import { Page } from 'puppeteer';
-import { relative, resolve } from "path";
+import { basename, dirname, relative, resolve } from "path";
 import { once } from "events";
-import { access, constants, mkdir, readdir, rm, writeFile } from "fs/promises";
+import { access, constants, mkdir, open, readdir, rm, writeFile } from "fs/promises";
 
 
 const baseDir = resolve(import.meta.dirname, "../");
@@ -15,6 +15,35 @@ const snapDir = resolve(baseDir, "fixtures", "__snapshots__");
 
 const write_diff = !!JSON.parse(process.env["WRITE_DIFF"] || "0");
 const write_new = !!JSON.parse(process.env["WRITE_NEW"] || "0");
+/**
+ * 
+ * @param {string} target 
+ * @param {any} data 
+ */
+async function writeVersionned(target, data){
+  const name = basename(target, ".png");
+  const dir = dirname(target);
+  let num = 0;
+  let handle;
+  while(!handle ){
+    try{
+      handle = await open(
+        resolve(dir, name+"-"+(++num).toString(10).padStart(3,"0") +".png"),
+        constants.O_CREAT|constants.O_EXCL|constants.O_WRONLY,
+      );
+    }catch(e){
+      if(e.code != "EEXIST") throw e;
+      else if(100 < num) throw e;
+    }
+  }
+  try{
+    await handle.writeFile(data);
+    
+  }finally{
+    await handle.close();
+  }
+}
+
 
 /**
  * 
@@ -86,8 +115,8 @@ async function compare(imgData, name){
 
     if(!process.env["OVERWRITE_SNAPSHOTS"]){
 
-      if(write_diff) await writeFile(diffFile, b);
-      if(write_new) await writeFile(newFile, imgData);
+      if(write_diff) await writeVersionned(diffFile, b);
+      if(write_new) await writeVersionned(newFile, imgData);
     }
     return diff;
   }else{
@@ -164,7 +193,7 @@ chai.use(register);
 export const mochaGlobalSetup = async function(){
   await mkdir(snapDir, {recursive: true});
   let files = await readdir(snapDir);
-  for (let diff of files.filter(f=>/_(diff|new)\.png$/.test(f))){
+  for (let diff of files.filter(f=>/_(diff|new)-\d{3}\.png$/.test(f))){
     await rm(resolve(snapDir,diff));
   }
 }

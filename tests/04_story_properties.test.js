@@ -17,9 +17,7 @@ describe("Properties edition in Voyager Story", function(){
     await page.goto(`${this.story}?prompt=false&document=scene.svx.json`, {
       waitUntil: 'load',
     });
-    await page.waitForFunction(()=>{
-      return new Promise(resolve=>requestAnimationFrame(resolve));
-    });
+    await page.locator(`meta[name="model-loads"][content="1"]`).wait();
   });
 
   /*
