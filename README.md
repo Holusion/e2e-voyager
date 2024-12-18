@@ -26,6 +26,10 @@ Configure Puppeteer locators default timeout.
 Set this to a very long time together with `HEADLESS=false` to debug failing tests
 
 
+### ECORPUS
+
+set to 0 to disable tests that are specific to an eCorpus environment
+
 ### OVERWRITE_SNAPSHOTS
 
 Rewrite snapshots as needed

@@ -3,15 +3,14 @@ import fs, { constants } from "node:fs/promises";
 import path, { resolve } from "node:path";
 import { tmpdir } from "node:os";
 import {Server} from "node:http";
-import { promisify } from "node:util";
+import { promisify, debuglog } from "node:util";
 
 import express from "express";
 import { v2 as webdav } from "webdav-server";
 import request from "supertest";
 import assert from "node:assert/strict";
 
-
-
+const debug = debuglog("http:requests");
 
 export const mochaHooks = {
   /**
@@ -35,10 +34,18 @@ export const mochaHooks = {
     await assert.doesNotReject(fs.access(path.join(distDir, distFile), constants.R_OK), `expect ${ distFile } to exist in ${distDir}`);
 
     this.reset = async ()=>{
+      this.log = [];
       if(this.server) await promisify(this.server.close.bind(this.server))();
       if(this.dir) await fs.rm(this.dir, {force: true, recursive: true});
       this.dir = await fs.mkdtemp(path.join(tmpdir(), "voyager-e2e-tests"));
       const app = express();
+
+      app.use("/", (req, res, next)=>{
+        res.on("close", ()=>{
+          debug(`[${res.statusCode}] ${req.method} ${req.path}`);
+        });
+        next();
+      });
       app.use("/", express.static(distDir));
       const webDAVServer = new webdav.WebDAVServer();
       await new Promise((resolve, reject)=>{

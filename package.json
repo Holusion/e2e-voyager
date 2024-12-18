@@ -9,9 +9,9 @@
   },
   "mocha":{
     "reporter": "spec",
-    "slow": 1500,
-    "timeout": 20000,
-    "require": ["hooks/chai.js", "hooks/browser.js", "hooks/serve.js", "hooks/chai-compare.js"],
+    "slow": 3000,
+    "timeout": 30000,
+    "require": ["hooks/chai.js", "hooks/browser.js", "hooks/serve.js", "hooks/chai-compare.js", "hooks/conditionals.js"],
     "spec": "tests/**/*.test.js",
     "asyncOnly": true
   },

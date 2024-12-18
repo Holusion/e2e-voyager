@@ -3,9 +3,12 @@
 import fs from "fs/promises";
 import path from "path";
 import os from "os";
+import { debuglog } from "util";
 
 import puppeteer from "puppeteer";
 
+
+const debug = debuglog("puppeteer");
 const chromeArgs = [
   '--disable-background-timer-throttling',
   '--disable-backgrounding-occluded-windows',
@@ -14,7 +17,7 @@ const chromeArgs = [
 ];
 
 const options = {
-  headless: process.env["HEADLESS"] == "false"? false : true,
+  headless: JSON.parse(process.env["HEADLESS"] || "1")?true:false,
   executablePath: process.env["PUPPETEER_EXEC_PATH"], // set by github action
   args: chromeArgs,
 };
@@ -53,11 +56,24 @@ export const mochaHooks = {
       throw new Error(`Failed to connect to puppeteer on ${wsEndpoint}: ${e.message}`);
     }
 
-    this.newPage = async ()=>{
-      const ctx = await this.browser.createBrowserContext();
+    const mainContext = await this.browser.createBrowserContext();
+    this._contexts.push(mainContext);
+    this.newPage = async (createContext = false)=>{
+      let ctx = mainContext;
+      if(createContext){
+        ctx = await this.browser.createBrowserContext();
+        this._contexts.push(ctx);
+      }
       const page = await ctx.newPage();
       page.setDefaultTimeout(timeout);
 
+      const dismissBeforeUnload = dialog =>
+        dialog.type() === "beforeunload" && dialog.dismiss();
+      page.on("dialog", dismissBeforeUnload);
+
+      if(debug.enabled){
+        page.on('console', msg => debug(msg.text()));
+      }
 
       await page.evaluateOnNewDocument(() => {
         window.addEventListener('DOMContentLoaded', () => {
@@ -69,9 +85,6 @@ export const mochaHooks = {
           document.querySelector("voyager-explorer")?.addEventListener("model-load", ()=>{ m.content = (++loads).toString()});
         });
       });
-
-      this._contexts.push(ctx);
-
       return page;
     }
   },

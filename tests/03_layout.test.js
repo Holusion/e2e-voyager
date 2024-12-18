@@ -1,13 +1,12 @@
 import fs from "fs/promises";
 import path from "path";
-import { setTimeout } from "timers/promises";
 
-describe("Properties edition in Voyager Story", function(){
+describe("Layout testing", function(){
   /**@type {import("puppeteer").Page} */
   let page;
   this.beforeEach(async function(){
     await this.reset();
-    page = await this.newPage();
+    page = await this.newPage(true);
 
     await Promise.all(["cube.glb", "scene.svx.json"].map(async f=>{
       await this.request.put("/"+f)

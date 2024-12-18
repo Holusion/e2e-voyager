@@ -20,14 +20,16 @@ declare global{
 }
 
 
+
 declare module 'mocha' {
   export interface Context {
     //From hooks/serve.js
     reset: ()=>Promise<void>;
     href: string;
     request: Agent;
+    log: string[];
     //From hooks/browser.js
-    newPage: (opts?:{autoClean?:boolean})=>Promise<Page>;
+    newPage: (withContext?:boolean)=>Promise<Page>;
   }
 }
 
